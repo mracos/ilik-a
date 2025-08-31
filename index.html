@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ilik-a</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ilik-a</h1>
+        
+        <div class="calculator-section">
+            <h2>Date Calculator</h2>
+            <div class="input-group">
+                <label for="baseDate">Base Date:</label>
+                <input type="date" id="baseDate">
+                <button onclick="setToday('baseDate')">Today</button>
+            </div>
+            
+            <div class="input-group">
+                <label for="timeOffset">Add/Subtract:</label>
+                <input type="number" id="timeOffset" placeholder="e.g., 29 or -10">
+                <div class="unit-selector">
+                    <button type="button" class="unit-button" id="unitButton" onclick="toggleUnitDropdown()">Days</button>
+                    <div class="unit-dropdown" id="unitDropdown">
+                        <div class="unit-option" onclick="selectUnit('hours', 'Hours')">Hours</div>
+                        <div class="unit-option" onclick="selectUnit('days', 'Days')">Days</div>
+                        <div class="unit-option" onclick="selectUnit('weeks', 'Weeks')">Weeks</div>
+                        <div class="unit-option" onclick="selectUnit('months', 'Months')">Months</div>
+                        <div class="unit-option" onclick="selectUnit('years', 'Years')">Years</div>
+                    </div>
+                </div>
+                <button onclick="calculateDate()">Calculate</button>
+            </div>
+            
+            <div class="quick-buttons">
+                <button onclick="quickDate(1, 'days')">Tomorrow</button>
+                <button onclick="quickDate(7, 'days')">Next Week</button>
+                <button onclick="quickDate(1, 'months')">Next Month</button>
+                <button onclick="quickDate(-1, 'days')">Yesterday</button>
+                <button onclick="quickDate(-7, 'days')">Last Week</button>
+                <button onclick="quickDate(-1, 'months')">Last Month</button>
+            </div>
+            
+            <div class="result" id="dateResult"></div>
+        </div>
+
+        <div class="calculator-section">
+            <h2>Age Calculator</h2>
+            <div class="input-group">
+                <label for="birthDate">Birth Date:</label>
+                <input type="date" id="birthDate">
+                <button onclick="calculateAge()">Calculate Age</button>
+            </div>
+            
+            <div class="result" id="ageResult"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
