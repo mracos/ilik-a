@@ -113,19 +113,26 @@ function calculateDate() {
 // Calculate age
 function calculateAge() {
     const birthDateInput = document.getElementById('birthDate').value;
+    const targetDateInput = document.getElementById('baseDate').value;
     const resultDiv = document.getElementById('ageResult');
-    
+
     if (!birthDateInput) {
         resultDiv.innerHTML = 'ENTER BIRTH DATE';
         resultDiv.className = 'result';
         return;
     }
-    
+
+    if (!targetDateInput) {
+        resultDiv.innerHTML = 'ENTER TARGET DATE ABOVE';
+        resultDiv.className = 'result';
+        return;
+    }
+
     const birthDate = new Date(birthDateInput);
-    const today = new Date();
-    
+    const today = new Date(targetDateInput);
+
     if (today < birthDate) {
-        resultDiv.innerHTML = 'BIRTH DATE CANNOT BE IN THE FUTURE';
+        resultDiv.innerHTML = 'TARGET DATE CANNOT BE BEFORE BIRTH DATE';
         resultDiv.className = 'result';
         return;
     }
@@ -156,32 +163,16 @@ function calculateAge() {
     // Calculate total months (approximate)
     const totalMonths = years * 12 + months;
     
-    const ageText = years > 0 ? 
+    const ageText = years > 0 ?
         `${years}Y ${months}M ${days}D` :
         months > 0 ?
         `${months}M ${days}D` :
         `${days}D`;
-    
+
     resultDiv.innerHTML = `
-        <div class="age-main">AGE TODAY: ${ageText}</div>
-        <div class="age-breakdown">
-            <h4>BREAKDOWN</h4>
-            <div class="breakdown-item">
-                <div class="breakdown-value">${totalDays.toLocaleString()}</div>
-                <div class="breakdown-label">TOTAL DAYS</div>
-            </div>
-            <div class="breakdown-item">
-                <div class="breakdown-value">${totalWeeks.toLocaleString()}</div>
-                <div class="breakdown-label">TOTAL WEEKS</div>
-            </div>
-            <div class="breakdown-item">
-                <div class="breakdown-value">${totalMonths}</div>
-                <div class="breakdown-label">TOTAL MONTHS</div>
-            </div>
-            <div class="breakdown-item">
-                <div class="breakdown-value">${(totalDays / 365.25).toFixed(2)}</div>
-                <div class="breakdown-label">TOTAL YEARS</div>
-            </div>
+        <div class="age-main">AGE: ${ageText}</div>
+        <div class="age-breakdown-compact">
+            ${totalDays.toLocaleString()} days • ${totalWeeks.toLocaleString()} weeks • ${totalMonths} months • ${(totalDays / 365.25).toFixed(2)} years
         </div>
     `;
     resultDiv.className = 'result highlight';
