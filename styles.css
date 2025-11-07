@@ -32,6 +32,17 @@ h1 {
     border-bottom: 1px solid #ccc;
 }
 
+.subtitle {
+    text-align: center;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666666;
+    padding: 20px;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+
 .calculator-section {
     padding: 30px;
     border-bottom: 1px solid #ddd;
