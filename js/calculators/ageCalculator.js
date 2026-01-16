@@ -38,6 +38,13 @@ export const AgeCalculator = {
     const totalMonths = years * 12 + months;
     const totalYears = (totalDays / 365.25).toFixed(2);
 
+    // Calculate days until next birthday
+    const nextBirthday = new Date(targetDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+    if (nextBirthday <= targetDate) {
+      nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+    }
+    const daysUntilBirthday = Math.ceil((nextBirthday.getTime() - targetDate.getTime()) / (1000 * 3600 * 24));
+
     return {
       years,
       months,
@@ -45,7 +52,9 @@ export const AgeCalculator = {
       totalDays,
       totalWeeks,
       totalMonths,
-      totalYears
+      totalYears,
+      daysUntilBirthday,
+      nextBirthday
     };
   },
 

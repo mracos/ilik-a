@@ -59,6 +59,24 @@ const EventHandlers = {
   },
 
   /**
+   * Handle tab switching
+   */
+  switchTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.tab === tabName);
+    });
+
+    // Update tab content
+    document.querySelectorAll('.tab-content').forEach(content => {
+      content.classList.remove('active');
+    });
+
+    const targetTab = tabName === 'dateMath' ? 'dateMathTab' : 'ageTab';
+    DOMUtils.getById(targetTab).classList.add('active');
+  },
+
+  /**
    * Handle quick date button click
    */
   quickDate(offset, unit) {
@@ -102,6 +120,7 @@ function init() {
   window.calculateDate = EventHandlers.calculateDate;
   window.calculateAge = EventHandlers.calculateAge;
   window.quickDate = EventHandlers.quickDate;
+  window.switchTab = EventHandlers.switchTab;
 }
 
 // Initialize when DOM is ready

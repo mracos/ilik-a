@@ -34,10 +34,20 @@ export const AgeUI = {
       const age = AgeCalculator.calculate(birthDate, targetDate);
       const ageText = AgeCalculator.formatShort(age);
 
+      const nextBirthdayFormatted = age.nextBirthday.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
       const html = `
         <div class="age-main">AGE: ${ageText}</div>
         <div class="age-breakdown-compact">
           ${age.totalDays.toLocaleString()} days • ${age.totalWeeks.toLocaleString()} weeks • ${age.totalMonths} months • ${age.totalYears} years
+        </div>
+        <div class="birthday-countdown">
+          🎂 ${age.daysUntilBirthday} days until next birthday (${nextBirthdayFormatted})
         </div>
       `;
 

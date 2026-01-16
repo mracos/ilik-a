@@ -13,10 +13,10 @@ body {
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 700px;
     margin: 0 auto;
     background: #fff;
-    border: 2px solid #ccc;
+    border: 1px solid #ddd;
 }
 
 h1 {
@@ -52,19 +52,73 @@ h1 {
     border-bottom: none;
 }
 
-.calculators-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.calculator-container {
+    margin: 0;
+    background: #fff;
+}
+
+.reference-date-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 25px;
+    background: #f8f8f8;
     border-bottom: 1px solid #ddd;
 }
 
-.calculators-grid .calculator-section {
-    border-bottom: none;
-    border-right: 1px solid #ddd;
+.reference-date-bar label {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    min-width: auto;
 }
 
-.calculators-grid .calculator-section:last-child {
-    border-right: none;
+.tab-bar {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+}
+
+.tab {
+    flex: 1;
+    padding: 15px 20px;
+    background: #f0f0f0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.tab:hover {
+    background: #e8e8e8;
+    color: #333;
+}
+
+.tab.active {
+    background: #fff;
+    color: #000;
+    border-bottom-color: #fff;
+}
+
+.tab-content {
+    display: none;
+    padding: 25px;
+}
+
+.tab-content.active {
+    display: block;
+    text-align: center;
+}
+
+.tab-content .input-group {
+    display: inline-flex;
+    justify-content: center;
 }
 
 h2 {
@@ -82,7 +136,6 @@ h2 {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
 }
 
 label {
@@ -97,10 +150,13 @@ input[type="date"],
 input[type="number"] {
     padding: 10px;
     border: 1px solid #ccc;
-    font-size: 16px;
+    font-size: 14px;
     font-family: 'Courier New', monospace;
     background: #fff;
-    min-width: 150px;
+}
+
+input[type="number"] {
+    width: 120px;
 }
 
 input[type="date"]:focus,
@@ -141,18 +197,22 @@ button:active {
     background: none;
     color: #000;
     border: none;
-    border-bottom: 1px solid #000;
     padding: 5px 0;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     font-family: 'Courier New', monospace;
     text-transform: uppercase;
 }
 
+.unit-button::after {
+    content: ' ▾';
+    font-size: 10px;
+    color: #999;
+}
+
 .unit-button:hover {
-    background: #fff;
-    color: #000;
+    color: #666;
 }
 
 .unit-dropdown {
@@ -186,20 +246,46 @@ button:active {
 }
 
 .unit-option:hover {
-    background: #fff;
-    color: #000;
+    background: #333;
+    color: #fff;
 }
 
 .quick-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin: 20px 0 10px;
+}
+
+.quick-label {
+    font-size: 12px;
+    color: #ccc;
+    margin: 0 8px;
 }
 
 .quick-buttons button {
-    padding: 12px 8px;
-    font-size: 11px;
+    background: none;
+    color: #888;
+    border: none;
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.quick-buttons button:hover {
+    color: #000;
+}
+
+.quick-buttons .go-button {
+    background: #333;
+    color: #fff;
+    padding: 8px 16px;
+    font-weight: bold;
+}
+
+.quick-buttons .go-button:hover {
+    background: #555;
+    color: #fff;
 }
 
 .result {
@@ -208,11 +294,9 @@ button:active {
     padding: 20px;
     margin-top: 20px;
     font-size: 14px;
-    line-height: 1.4;
     color: #000;
     font-family: 'Courier New', monospace;
-    min-height: 50px;
-    display: block;
+    white-space: nowrap;
 }
 
 .result:empty {
@@ -250,7 +334,12 @@ button:active {
     }
     
     .quick-buttons {
-        grid-template-columns: repeat(2, 1fr);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .quick-label:last-of-type {
+        margin-left: 0;
     }
 }
 
@@ -272,17 +361,27 @@ button:active {
     line-height: 1.6;
 }
 
-@media (max-width: 900px) {
-    .calculators-grid {
-        grid-template-columns: 1fr;
+.birthday-countdown {
+    background: #f5f5f5;
+    color: #333;
+    padding: 12px;
+    margin-top: 15px;
+    font-size: 13px;
+    text-align: center;
+    border: 1px dashed #ccc;
+}
+
+@media (max-width: 600px) {
+    .calculator-container {
+        margin: 10px;
     }
 
-    .calculators-grid .calculator-section {
-        border-right: none;
-        border-bottom: 1px solid #ddd;
+    .reference-date-bar {
+        flex-wrap: wrap;
+        padding: 15px;
     }
 
-    .calculators-grid .calculator-section:last-child {
-        border-bottom: none;
+    .tab-content {
+        padding: 15px;
     }
 }
