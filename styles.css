@@ -361,6 +361,23 @@ button:active {
     line-height: 1.6;
 }
 
+.share-button {
+    display: block;
+    margin: 15px auto 0;
+    background: none;
+    color: #999;
+    border: 1px dashed #ccc;
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.share-button:hover {
+    color: #000;
+    border-color: #999;
+    background: none;
+}
+
 .birthday-countdown {
     background: #f5f5f5;
     color: #333;
