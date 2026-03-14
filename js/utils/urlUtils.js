@@ -13,7 +13,7 @@ export const URLUtils = {
 
     if (!tab) return null;
 
-    const state = { tab, base: params.get('base') };
+    const state = { tab, base: params.get('base'), tz: params.get('tz') };
 
     if (tab === 'dateMath') {
       state.offset = params.get('offset');
@@ -35,6 +35,7 @@ export const URLUtils = {
     params.set('tab', state.tab);
 
     if (state.base) params.set('base', state.base);
+    if (state.tz) params.set('tz', state.tz);
 
     if (state.tab === 'dateMath') {
       if (state.offset) params.set('offset', state.offset);

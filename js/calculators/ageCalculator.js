@@ -2,6 +2,8 @@
  * Age calculation logic
  */
 
+import { DateUtils } from '../utils/dateUtils.js';
+
 export const AgeCalculator = {
   /**
    * Calculate age between two dates
@@ -15,14 +17,17 @@ export const AgeCalculator = {
       throw new Error('TARGET DATE CANNOT BE BEFORE BIRTH DATE');
     }
 
+    const birth = DateUtils.getDateParts(birthDate);
+    const target = DateUtils.getDateParts(targetDate);
+
     // Calculate years, months, days
-    let years = targetDate.getFullYear() - birthDate.getFullYear();
-    let months = targetDate.getMonth() - birthDate.getMonth();
-    let days = targetDate.getDate() - birthDate.getDate();
+    let years = target.year - birth.year;
+    let months = target.month - birth.month;
+    let days = target.day - birth.day;
 
     if (days < 0) {
       months--;
-      const lastMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
+      const lastMonth = new Date(target.year, target.month - 1, 0);
       days += lastMonth.getDate();
     }
 
@@ -39,7 +44,7 @@ export const AgeCalculator = {
     const totalYears = (totalDays / 365.25).toFixed(2);
 
     // Calculate days until next birthday
-    const nextBirthday = new Date(targetDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+    const nextBirthday = new Date(target.year, birth.month - 1, birth.day, 12);
     if (nextBirthday <= targetDate) {
       nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
     }

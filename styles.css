@@ -74,6 +74,57 @@ h1 {
     min-width: auto;
 }
 
+.tz-separator {
+    color: #ccc;
+    font-size: 18px;
+}
+
+.tz-selector {
+    position: relative;
+    display: inline-block;
+}
+
+#tzInput {
+    font-size: 12px;
+    width: 180px;
+}
+
+.tz-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 1000;
+}
+
+.tz-dropdown.show {
+    display: block;
+}
+
+.tz-option {
+    padding: 6px 10px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #000;
+    border-bottom: 1px solid #eee;
+}
+
+.tz-option:last-child {
+    border-bottom: none;
+}
+
+.tz-option:hover {
+    background: #333;
+    color: #fff;
+}
+
 .tab-bar {
     display: flex;
     border-bottom: 2px solid #ddd;
@@ -147,12 +198,14 @@ label {
 }
 
 input[type="date"],
-input[type="number"] {
+input[type="number"],
+input[type="text"] {
     padding: 10px;
     border: 1px solid #ccc;
     font-size: 14px;
     font-family: 'Courier New', monospace;
     background: #fff;
+    color: #000;
 }
 
 input[type="number"] {
@@ -160,7 +213,8 @@ input[type="number"] {
 }
 
 input[type="date"]:focus,
-input[type="number"]:focus {
+input[type="number"]:focus,
+input[type="text"]:focus {
     outline: none;
     border-color: #999;
     background: #fff;
@@ -396,6 +450,18 @@ button:active {
     .reference-date-bar {
         flex-wrap: wrap;
         padding: 15px;
+    }
+
+    .tz-separator {
+        display: none;
+    }
+
+    .tz-selector {
+        width: 100%;
+    }
+
+    #tzInput {
+        width: 100%;
     }
 
     .tab-content {

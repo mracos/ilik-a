@@ -3,6 +3,7 @@
  */
 
 import { DOMUtils } from '../utils/domUtils.js';
+import { DateUtils } from '../utils/dateUtils.js';
 import { AgeCalculator } from '../calculators/ageCalculator.js';
 
 export const AgeUI = {
@@ -25,21 +26,16 @@ export const AgeUI = {
       return;
     }
 
-    // Parse dates
-    const birthDate = new Date(birthDateInput);
-    const targetDate = new Date(targetDateInput);
+    // Parse dates (noon to avoid UTC midnight boundary issues)
+    const birthDate = DateUtils.parseInput(birthDateInput);
+    const targetDate = DateUtils.parseInput(targetDateInput);
 
     // Calculate age
     try {
       const age = AgeCalculator.calculate(birthDate, targetDate);
       const ageText = AgeCalculator.formatShort(age);
 
-      const nextBirthdayFormatted = age.nextBirthday.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
+      const nextBirthdayFormatted = DateUtils.formatLong(age.nextBirthday);
 
       const html = `
         <div class="age-main">AGE: ${ageText}</div>

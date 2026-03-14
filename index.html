@@ -29,6 +29,12 @@
                 <label for="baseDate">Reference Date:</label>
                 <input type="date" id="baseDate">
                 <button onclick="setToday('baseDate')">Today</button>
+                <span class="tz-separator">|</span>
+                <label for="tzInput">TZ:</label>
+                <div class="tz-selector">
+                    <input type="text" id="tzInput" autocomplete="off" placeholder="Timezone">
+                    <div class="tz-dropdown" id="tzDropdown"></div>
+                </div>
             </div>
 
             <div class="tab-bar">

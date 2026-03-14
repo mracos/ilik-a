@@ -22,7 +22,7 @@ export const DateMathUI = {
       return;
     }
 
-    const baseDate = new Date(baseDateInput);
+    const baseDate = DateUtils.parseInput(baseDateInput);
     const offset = parseInt(offsetInput);
 
     // Calculate result

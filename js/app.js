@@ -48,7 +48,7 @@ const EventHandlers = {
     const baseDate = DOMUtils.getInputValue('baseDate');
     const offset = DOMUtils.getInputValue('timeOffset');
     DateMathUI.render(baseDate, offset, AppState.currentUnit);
-    URLUtils.updateURL({ tab: 'dateMath', base: baseDate, offset, unit: AppState.currentUnit });
+    URLUtils.updateURL({ tab: 'dateMath', base: baseDate, offset, unit: AppState.currentUnit, tz: DateUtils.timezone });
     showShareButton('dateMathTab');
   },
 
@@ -59,7 +59,7 @@ const EventHandlers = {
     const birthDate = DOMUtils.getInputValue('birthDate');
     const targetDate = DOMUtils.getInputValue('baseDate');
     AgeUI.render(birthDate, targetDate);
-    URLUtils.updateURL({ tab: 'age', base: targetDate, birth: birthDate });
+    URLUtils.updateURL({ tab: 'age', base: targetDate, birth: birthDate, tz: DateUtils.timezone });
     showShareButton('ageTab');
   },
 
@@ -89,9 +89,9 @@ const EventHandlers = {
    */
   quickDate(offset, unit) {
     const baseDateValue = DOMUtils.getInputValue('baseDate') || DateUtils.getTodayISO();
-    const baseDate = new Date(baseDateValue);
+    const baseDate = DateUtils.parseInput(baseDateValue);
     DateMathUI.renderQuick(baseDate, offset, unit);
-    URLUtils.updateURL({ tab: 'dateMath', base: baseDateValue, offset: String(offset), unit, quick: true });
+    URLUtils.updateURL({ tab: 'dateMath', base: baseDateValue, offset: String(offset), unit, quick: true, tz: DateUtils.timezone });
     showShareButton('dateMathTab');
   },
 
@@ -121,6 +121,18 @@ function restoreFromURL() {
   const state = URLUtils.readState();
   if (!state) return false;
 
+  // Restore timezone if present in URL
+  if (state.tz) {
+    try {
+      Intl.DateTimeFormat(undefined, { timeZone: state.tz });
+      DateUtils.timezone = state.tz;
+      const tzInput = DOMUtils.getById('tzInput');
+      if (tzInput) tzInput.value = state.tz;
+    } catch {
+      // Invalid timezone in URL, ignore
+    }
+  }
+
   if (state.base) {
     DOMUtils.setInputValue('baseDate', state.base);
   }
@@ -130,7 +142,7 @@ function restoreFromURL() {
   if (state.tab === 'dateMath' && state.offset && state.unit) {
     if (state.quick) {
       const baseDateValue = state.base || DateUtils.getTodayISO();
-      const baseDate = new Date(baseDateValue);
+      const baseDate = DateUtils.parseInput(baseDateValue);
       DateMathUI.renderQuick(baseDate, parseInt(state.offset), state.unit);
     } else {
       DOMUtils.setInputValue('timeOffset', state.offset);
@@ -148,11 +160,65 @@ function restoreFromURL() {
 }
 
 /**
+ * Setup timezone autocomplete dropdown
+ */
+function initTimezone() {
+  const tzInput = DOMUtils.getById('tzInput');
+  const tzDropdown = DOMUtils.getById('tzDropdown');
+  const timezones = Intl.supportedValuesOf('timeZone');
+
+  tzInput.value = DateUtils.timezone;
+
+  function showFiltered(query) {
+    const q = query.toLowerCase();
+    const matches = q
+      ? timezones.filter(tz => tz.toLowerCase().includes(q)).slice(0, 20)
+      : [];
+
+    tzDropdown.innerHTML = '';
+    if (matches.length === 0) {
+      tzDropdown.classList.remove('show');
+      return;
+    }
+
+    matches.forEach(tz => {
+      const div = document.createElement('div');
+      div.className = 'tz-option';
+      div.textContent = tz;
+      div.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        tzInput.value = tz;
+        DateUtils.timezone = tz;
+        DOMUtils.setInputValue('baseDate', DateUtils.getTodayISO());
+        tzDropdown.classList.remove('show');
+      });
+      tzDropdown.appendChild(div);
+    });
+    tzDropdown.classList.add('show');
+  }
+
+  tzInput.addEventListener('input', () => showFiltered(tzInput.value));
+  tzInput.addEventListener('focus', () => {
+    if (tzInput.value) showFiltered(tzInput.value);
+  });
+  tzInput.addEventListener('blur', () => {
+    tzDropdown.classList.remove('show');
+    // Revert to current tz if input doesn't match
+    if (!timezones.includes(tzInput.value)) {
+      tzInput.value = DateUtils.timezone;
+    }
+  });
+}
+
+/**
  * Initialize application
  */
 function init() {
   // Set base date to today
   DOMUtils.setInputValue('baseDate', DateUtils.getTodayISO());
+
+  // Setup timezone selector
+  initTimezone();
 
   // Setup dropdown click outside handler
   document.addEventListener('click', (e) => {
